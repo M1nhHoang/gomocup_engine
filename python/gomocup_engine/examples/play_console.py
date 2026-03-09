@@ -24,6 +24,7 @@ def main():
         os.path.dirname(os.path.abspath(__file__)),
         "..",  # Up one level from examples/
         "..",  # Up one level from gomocup_engine/
+        "..",  # Up one level from python/
         "engine.exe",
     )
 

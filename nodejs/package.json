@@ -1,0 +1,18 @@
+{
+  "name": "gomocup-engine",
+  "version": "1.0.0",
+  "description": "Node.js wrapper for Gomocup-protocol Gomoku/Renju AI engines (Yixin, Embryo, etc.)",
+  "main": "src/gomocup-engine.js",
+  "keywords": ["gomoku", "gomocup", "renju", "yixin", "embryo", "ai", "engine"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "example": "node examples/play-console.js"
+  }
+}
