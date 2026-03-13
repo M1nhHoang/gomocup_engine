@@ -1,11 +1,11 @@
 /**
- * Example: Play Gomoku in the console against the Yixin/Embryo engine.
+ * Example: Play Gomoku in the console against the Rapfi engine.
  *
  * Usage:
  *   node play-console.js
  *
  * Requirements:
- *   - engine.exe must be in the expected path or set ENGINE_PATH below.
+ *   - Rapfi engine binaries must be in the engine/ folder.
  */
 
 'use strict';
@@ -17,10 +17,21 @@ const { GomocupEngine } = require('../src/gomocup-engine');
 
 const BOARD_SIZE = 15;
 
-// Resolve engine path: up from examples/ → nodejs/ → gomocup_engine/ → engine.exe
-const ENGINE_PATH = path.join(__dirname, '..', '..', 'engine.exe');
+// Auto-detect platform and resolve engine path
+function getEnginePath() {
+  const engineDir = path.join(__dirname, '..', '..', 'engine');
+  if (process.platform === 'win32') {
+    return path.join(engineDir, 'pbrain-rapfi-windows-sse.exe');
+  } else if (process.platform === 'darwin') {
+    return path.join(engineDir, 'pbrain-rapfi-macos-apple-silicon');
+  } else {
+    return path.join(engineDir, 'pbrain-rapfi-linux-clang-sse');
+  }
+}
+
+const ENGINE_PATH = getEnginePath();
 // Or specify directly:
-// const ENGINE_PATH = 'C:\\path\\to\\engine.exe';
+// const ENGINE_PATH = 'C:\\path\\to\\pbrain-rapfi-windows-sse.exe';
 
 const BLACK = 'X'; // Engine
 const WHITE = 'O'; // Player

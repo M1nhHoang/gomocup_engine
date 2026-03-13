@@ -1,15 +1,16 @@
 """
-Example: Play Gomoku in the console against the Yixin/Embryo engine.
+Example: Play Gomoku in the console against the Rapfi engine.
 
 Usage:
     python play_console.py
 
 Requirements:
-    - engine.exe must be in the expected path or set ENGINE_PATH below.
+    - Rapfi engine binaries must be in the engine/ folder.
 """
 
 import os
 import sys
+import platform
 
 # Add parent directory to path so the module can be imported
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -17,19 +18,31 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from gomocup_engine import GomocupEngine
 
 
-def main():
-    # ── Configuration ─────────────────────────────────────────
-    BOARD_SIZE = 15
-    ENGINE_PATH = os.path.join(
+def get_engine_path():
+    """Auto-detect platform and return the appropriate Rapfi binary path."""
+    engine_dir = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         "..",  # Up one level from examples/
         "..",  # Up one level from gomocup_engine/
         "..",  # Up one level from python/
-        "engine.exe",
+        "engine",
     )
+    system = platform.system()
+    if system == "Windows":
+        return os.path.join(engine_dir, "pbrain-rapfi-windows-sse.exe")
+    elif system == "Darwin":
+        return os.path.join(engine_dir, "pbrain-rapfi-macos-apple-silicon")
+    else:
+        return os.path.join(engine_dir, "pbrain-rapfi-linux-clang-sse")
+
+
+def main():
+    # ── Configuration ─────────────────────────────────────────
+    BOARD_SIZE = 15
+    ENGINE_PATH = get_engine_path()
 
     # Or specify the path directly:
-    # ENGINE_PATH = r"C:\path\to\engine.exe"
+    # ENGINE_PATH = r"C:\path\to\pbrain-rapfi-windows-sse.exe"
 
     if not os.path.isfile(ENGINE_PATH):
         print(f"Engine not found at: {ENGINE_PATH}")

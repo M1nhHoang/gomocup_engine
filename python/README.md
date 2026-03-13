@@ -1,10 +1,10 @@
 # gomocup_engine
 
-A Python module for integrating Gomoku/Renju AI engines (Yixin, Embryo, or any Gomocup-compatible engine) into your applications.
+A Python module for integrating Gomoku/Renju AI engines (Rapfi or any Gomocup-compatible engine) into your applications.
 
 > **Note:** This module is a **wrapper only** — it does NOT include the engine binary.
-> You must provide your own `engine.exe` and point to it when creating a `GomocupEngine` instance.
-> The engine executable must reside alongside its data files (`*.dat`, `config.c`, etc.).
+> Place Rapfi (or another Gomocup-compatible engine) in the `engine/` folder.
+> The engine executable must reside alongside its data files (`config.toml`, `*.bin`, `*.bin.lz4`).
 
 ## Installation
 
@@ -35,7 +35,7 @@ from gomocup_engine import GomocupEngine
 from gomocup_engine import GomocupEngine
 
 # Initialize — provide the path to your engine executable
-engine = GomocupEngine("path/to/engine.exe")
+engine = GomocupEngine("engine/pbrain-rapfi-windows-sse.exe")
 engine.start(board_size=15)
 engine.configure(timeout_turn=2000, max_depth=10, rule=0)
 
@@ -62,8 +62,8 @@ Create a new engine wrapper instance.
 
 | Parameter | Description |
 |---|---|
-| `engine_path` | Path to the engine executable (`.exe`). |
-| `working_dir` | Working directory for the engine process. Defaults to the directory containing the executable. Must contain data files (`*.dat`, `config.c`, etc.). |
+| `engine_path` | Path to the engine executable. |
+| `working_dir` | Working directory for the engine process. Defaults to the directory containing the executable. Must contain data files (`config.toml`, `*.bin`, `*.bin.lz4`). |
 
 ### Lifecycle
 
@@ -129,7 +129,7 @@ move = engine.board([
 ### Context Manager
 
 ```python
-with GomocupEngine("engine.exe") as engine:
+with GomocupEngine("engine/pbrain-rapfi-windows-sse.exe") as engine:
     engine.start(15)
     engine.configure(max_depth=8)
     move = engine.begin()
@@ -161,7 +161,7 @@ from gomocup_engine import GomocupEngine
 
 class GomokuGame:
     def __init__(self):
-        self.engine = GomocupEngine("path/to/engine.exe")
+        self.engine = GomocupEngine("engine/pbrain-rapfi-windows-sse.exe")
         self.engine.start(15)
         self.engine.configure(timeout_turn=2000, max_depth=10)
     
@@ -186,7 +186,7 @@ from fastapi import FastAPI
 from gomocup_engine import GomocupEngine
 
 app = FastAPI()
-engine = GomocupEngine("engine.exe")
+engine = GomocupEngine("engine/pbrain-rapfi-windows-sse.exe")
 engine.start(15)
 engine.configure(max_depth=8)
 

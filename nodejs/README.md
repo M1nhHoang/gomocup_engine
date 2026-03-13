@@ -1,10 +1,10 @@
 # gomocup-engine (Node.js)
 
-A Node.js module for integrating Gomoku/Renju AI engines (Yixin, Embryo, or any Gomocup-compatible engine) into your applications.
+A Node.js module for integrating Gomoku/Renju AI engines (Rapfi or any Gomocup-compatible engine) into your applications.
 
 > **Note:** This module is a **wrapper only** — it does NOT include the engine binary.
-> You must provide your own `engine.exe` and point to it when creating a `GomocupEngine` instance.
-> The engine executable must reside alongside its data files (`*.dat`, `config.c`, etc.).
+> Place Rapfi (or another Gomocup-compatible engine) in the `engine/` folder.
+> The engine executable must reside alongside its data files (`config.toml`, `*.bin`, `*.bin.lz4`).
 
 ## Installation
 
@@ -31,7 +31,7 @@ npm link gomocup-engine
 const { GomocupEngine } = require('gomocup-engine');
 
 async function main() {
-  const engine = new GomocupEngine('path/to/engine.exe');
+  const engine = new GomocupEngine('engine/pbrain-rapfi-windows-sse.exe');
   await engine.start(15);
   engine.configure({ timeoutTurn: 2000, maxDepth: 10, rule: 0 });
 
@@ -60,7 +60,7 @@ Create a new engine wrapper instance.
 
 | Parameter | Description |
 |---|---|
-| `enginePath` | Path to the engine executable (`.exe`). |
+| `enginePath` | Path to the engine executable. |
 | `workingDir` | Working directory for the engine process. Defaults to the directory containing the executable. |
 
 ### Lifecycle
@@ -161,7 +161,7 @@ const { GomocupEngine } = require('gomocup-engine');
 const app = express();
 app.use(express.json());
 
-const engine = new GomocupEngine('engine.exe');
+const engine = new GomocupEngine('engine/pbrain-rapfi-windows-sse.exe');
 
 (async () => {
   await engine.start(15);
@@ -187,10 +187,10 @@ const engine = new GomocupEngine('engine.exe');
 
 1. **Always set `maxDepth`** — The engine may ignore `timeoutTurn` when `maxDepth` is very large.
 2. **Engine blocks while thinking** — Do not send commands while the engine is computing. Wait for the move response before sending the next command.
-3. **Working directory** — The engine executable must be in a directory containing its data files (`base.dat`, `book*.dat`, `config.c`).
+3. **Working directory** — The engine executable must be in a directory containing its data files (`config.toml`, `*.bin`, `*.bin.lz4`).
 4. **Node.js >= 14** — Uses `child_process.spawn`, `readline`, and modern JS features.
-5. **Platform** — Engine `.exe` files only run on Windows.
-6. **Engine not included** — You must supply your own Gomocup-compatible engine binary.
+5. **Platform** — Use the appropriate binary for your OS (Windows `.exe`, Linux, or macOS).
+6. **Engine included** — Rapfi binaries for all platforms are in the `engine/` folder.
 
 ---
 
