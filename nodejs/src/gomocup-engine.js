@@ -113,6 +113,11 @@ class GomocupEngine extends EventEmitter {
       this.emit('error', err);
     });
 
+    this._proc.stdin.on('error', (err) => {
+      this._running = false;
+      this.emit('error', new EngineError(`Engine stdin error: ${err.message}`));
+    });
+
     this._send(`START ${boardSize}`);
     const ok = await this._waitOk();
     if (ok) {
@@ -302,7 +307,12 @@ class GomocupEngine extends EventEmitter {
     if (!this._proc || !this._running) {
       throw new EngineError('Engine process is not running');
     }
-    this._proc.stdin.write(cmd + '\r\n');
+    try {
+      this._proc.stdin.write(cmd + '\r\n');
+    } catch (err) {
+      this._running = false;
+      throw new EngineError(`Failed to send command to engine: ${err.message}`);
+    }
   }
 
   /** @private Called for each line from engine stdout. */
